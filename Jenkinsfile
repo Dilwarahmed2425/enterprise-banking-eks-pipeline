@@ -4,7 +4,7 @@ pipeline {
     environment {
         // CHANGE THIS to your real AWS Account ID
         AWS_ACCOUNT_ID = '183295449692' 
-        AWS_REGION     = 'us-east-1'
+        AWS_REGION     = 'ap-south-1'
         ECR_REPO_NAME  = 'enterprise-banking-app'
         CLUSTER_NAME   = 'banking-production-cluster'
         IMAGE_TAG      = "${BUILD_NUMBER}"
