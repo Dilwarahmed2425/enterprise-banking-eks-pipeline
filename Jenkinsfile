@@ -2,8 +2,7 @@ pipeline {
     agent any
     
     environment {
-        // CHANGE THIS to your real AWS Account ID
-        AWS_ACCOUNT_ID = '183295449692' 
+        AWS_ACCOUNT_ID = '183295449692' // Ensure this is your actual account ID
         AWS_REGION     = 'ap-south-1'
         ECR_REPO_NAME  = 'enterprise-banking-app'
         CLUSTER_NAME   = 'banking-production-cluster'
@@ -19,10 +18,9 @@ pipeline {
         }
 
         stage('Maven Compile & Package') {
-            agent {
-                docker { image 'maven:3.9.6-eclipse-temurin-17' }
-            }
             steps {
+                // Installs Maven directly if missing, then runs the package
+                sh 'sudo apt-get update && sudo apt-get install maven -y'
                 sh 'mvn clean package -DskipTests'
             }
         }
@@ -59,7 +57,6 @@ pipeline {
                         sh "kubectl apply -f k8s/service.yaml"
                         sh "kubectl apply -f k8s/hpa.yaml"
                         
-                        // Dynamically update the placeholder image tag in deployment.yaml
                         sh "sed -i 's/AWS_ACCOUNT_ID/${AWS_ACCOUNT_ID}/g' k8s/deployment.yaml"
                         sh "sed -i 's/:latest/:${IMAGE_TAG}/g' k8s/deployment.yaml"
                         sh "kubectl apply -f k8s/deployment.yaml"
