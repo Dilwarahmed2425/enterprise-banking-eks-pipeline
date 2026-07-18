@@ -20,7 +20,6 @@ pipeline {
         stage('Maven Compile & Package') {
             steps {
                 // Installs Maven directly if missing, then runs the package
-                sh 'sudo apt-get update && sudo apt-get install maven -y'
                 sh 'mvn clean package -DskipTests'
             }
         }
